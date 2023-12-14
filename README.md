@@ -3,7 +3,7 @@
 This directory contains an example deployment of Boundary using docker-compose
 and Terraform. The lab environment is meant to accompany the Hashicorp Learn
 [Boundary event logging
-tutorial](https://learn.hashicorp.com/tutorials/boundary/event-logging).
+tutorial](https://developer.hashicorp.com/boundary/tutorials/self-managed-deployment/event-logging).
 
 In this example, Boundary is deployed using the
 [hashicorp/boundary](https://hub.docker.com/r/hashicorp/boundary) Dockerhub
