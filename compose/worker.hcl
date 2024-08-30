@@ -16,7 +16,7 @@ worker {
   description = "A worker for a docker demo"
   address     = "worker"
   public_addr = "localhost:9202"
-  controllers = ["boundary"]
+  initial_upstreams = ["boundary"]
 }
 
 kms "aead" {
