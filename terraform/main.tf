@@ -3,9 +3,9 @@
 
 terraform {
   required_providers {
-    boundary = {
+    boundary  = {
       source  = "hashicorp/boundary"
-      version = "1.0.9"
+      version = "1.1.15"
     }
   }
 }
@@ -68,7 +68,6 @@ resource "boundary_account_password" "user" {
   for_each       = var.users
   name           = each.key
   description    = "User account for ${each.key}"
-  type           = "password"
   login_name     = lower(each.key)
   password       = "password"
   auth_method_id = boundary_auth_method.password.id
@@ -76,27 +75,27 @@ resource "boundary_account_password" "user" {
 
 resource "boundary_role" "global_anon_listing" {
   scope_id = boundary_scope.global.id
-  grant_strings = [
-    "id=*;type=auth-method;actions=list,authenticate",
-    "type=scope;actions=list",
-    "id={{account.id}};actions=read,change-password"
-  ]
   principal_ids = ["u_anon"]
+  grant_strings = [
+    "ids=*;type=auth-method;actions=list,authenticate",
+    "type=scope;actions=list",
+    "ids={{account.id}};actions=read,change-password"
+  ]
 }
 
 resource "boundary_role" "org_anon_listing" {
-  scope_id = boundary_scope.org.id
-  grant_strings = [
-    "id=*;type=auth-method;actions=list,authenticate",
-    "type=scope;actions=list",
-    "id={{account.id}};actions=read,change-password"
-  ]
+  scope_id      = boundary_scope.org.id
   principal_ids = ["u_anon"]
+  grant_strings = [
+    "ids=*;type=auth-method;actions=list,authenticate",
+    "type=scope;actions=list",
+    "ids={{account.id}};actions=read,change-password"
+  ]
 }
 resource "boundary_role" "org_admin" {
-  scope_id       = "global"
-  grant_scope_id = boundary_scope.org.id
-  grant_strings  = ["id=*;type=*;actions=*"]
+  scope_id        = "global"
+  grant_scope_ids = [boundary_scope.org.id]
+  grant_strings   = ["ids=*;type=*;actions=*"]
   principal_ids = concat(
     [for user in boundary_user.user : user.id],
     ["u_auth"]
@@ -104,9 +103,9 @@ resource "boundary_role" "org_admin" {
 }
 
 resource "boundary_role" "proj_admin" {
-  scope_id       = boundary_scope.org.id
-  grant_scope_id = boundary_scope.project.id
-  grant_strings  = ["id=*;type=*;actions=*"]
+  scope_id        = boundary_scope.org.id
+  grant_scope_ids = [boundary_scope.project.id]
+  grant_strings   = ["ids=*;type=*;actions=*"]
   principal_ids = concat(
     [for user in boundary_user.user : user.id],
     ["u_auth"]
@@ -166,9 +165,9 @@ resource "boundary_target" "db" {
 }
 
 resource "boundary_host_static" "postgres" {
-  type        = "static"
-  name        = "postgres"
-  description = "Private postgres container"
+  type            = "static"
+  name            = "postgres"
+  description     = "Private postgres container"
   # DNS set via docker-compose
   address         = "postgres"
   host_catalog_id = boundary_host_catalog_static.databases.id
