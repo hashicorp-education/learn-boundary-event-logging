@@ -57,6 +57,7 @@ events {
   audit_enabled        = true
   observations_enabled = true
   sysevents_enabled    = true
+  telemetry_enabled    = true
 
   sink "stderr" {
     name        = "all-events"

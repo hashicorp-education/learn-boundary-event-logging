@@ -1,14 +1,8 @@
 # Docker Deployment
 
-This directory contains an example deployment of Boundary using docker-compose
-and Terraform. The lab environment is meant to accompany the Hashicorp Learn
-[Boundary event logging
-tutorial](https://developer.hashicorp.com/boundary/tutorials/self-managed-deployment/event-logging).
+This directory contains an example deployment of Boundary using docker-compose and Terraform. The lab environment accompanies the Hashicorp Learn [Boundary event logging tutorial](https://developer.hashicorp.com/boundary/tutorials/self-managed-deployment/event-logging).
 
-In this example, Boundary is deployed using the
-[hashicorp/boundary](https://hub.docker.com/r/hashicorp/boundary) Dockerhub
-image. The Boundary service ports are forwarded to the host machine to mimic
-being in a "public" network. 
+In this example, Boundary is deployed using the [hashicorp/boundary](https://hub.docker.com/r/hashicorp/boundary) Dockerhub image. The Boundary service ports are forwarded to the host machine to mimic being in a "public" network. 
 
 This deployment includes the following containers:
 
@@ -52,7 +46,7 @@ Login to the UI:
   - Auth method ID: find this in the UI when selecting the auth method or from TF output
 
 ```bash
-$ boundary authenticate password -login-name user1 -password password -auth-method-id <get_from_console_or_tf>
+$ boundary authenticate password -login-name user1 -password password -auth-method-id <get_id_from_console_or_tf>
 
 Authentication information:
   Account ID:      apw_gAE1rrpnG2
@@ -62,6 +56,7 @@ Authentication information:
 ```
 
 ## Audit logs and ELK
+
 The boundary controller is configured to write out audit events to a log file,
 `auditevents/controller.log`. The docker-compose.yml provides services for
 collecting and shipping these logs to elasticsearch with kibana for
